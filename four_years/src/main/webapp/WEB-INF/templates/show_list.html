@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="css/show_list.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css"/>
+</head>
+<body>
+<div id="wrapperNeue" class="wrapperNeue">
+<div id="main" class="png_bg">
+<div class="columns clearit">
+<div id="columnSubjectBrowserA" class="column">
+    <div id="browserTools" class="clearit">
+        <a href="/" class="1">按排名顺序</a>
+        .
+        <a href="/" class="1">按日期排序</a>
+
+    </div>
+    <div class="section" th:fragment="section1" th:id="section1">
+        <ul th:each="page_list:${page_lists}" id="browserItemList" class="browserFull" style="list-style-type:none">
+         <li id="item" class="item odd clearit">
+           <a href="/" class="subjectcover cover l1">
+               <sqan class="image">
+                   <img th:src="@{images/{imgName}(imgName=${page_list.pimage})}" class="cover"/>
+               </sqan>
+               <span class="overlay"></span>
+           </a>
+             <div class="inner">
+             <h3>
+                 <a href="/" class="1">
+
+                     <span th:text=" ${page_list.bookname}"/>
+                 </a>
+
+             </h3>
+
+             <p class="info tip">
+                 <span th:text=" ${page_list.data}"/>
+             </p>
+             </div>
+         </li>
+
+        </ul>
+
+    </div>
+    <div style="text-align: center;margin:250px auto;">
+        <div id="pager" class="pager clearfix">
+        </div>
+    </div>
+   <!-- <div th:include="page::myfooter"></div>-->
+
+    <form action="/page" id="subdata">
+        <input type="hidden" name="page_number" id="page_value" value="1"/>
+    </form>
+
+</div>
+
+
+
+<div id="columnSubjectBrowserB" class="column">
+<div class="sideInner">
+    <h2 class="subtitle">类型</h2>
+    <ul class="grouped clearit" style="list-style-type:none">
+        <li>
+            <a href="/book/browser" class="l">全部</a>
+        </li>
+        <li>
+            <a href="/book/browser/emo" class="l">情感</a>
+        </li>
+        <li>
+            <a href="/book/browser/his" class="l">历史</a>
+        </li>
+        <li>
+            <a href="/book/browser/city" class="l">都市</a>
+        </li>
+    </ul>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+</body>
+
+
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js" ></script>
+<script src="js/jquery.z-pager.js" type="text/javascript" charset="utf-8"></script>
+<script  >
+    $("#pager").zPager({
+        totalData: 50,
+        htmlBox: $('#wraper'),
+        btnShow: true,
+        ajaxSetData: false
+    });
+
+    function currentPage(currentPage) {
+        /*
+            触发页码数位置： Page/js/jquery.z-pager.js 64行
+        */
+
+       if(currentPage!=document.getElementById("page_value").value) {
+           document.getElementById("page_value").value = currentPage;
+           //document.getElementById("subdata").submit();
+           /*var url = '/page';
+           $('#reload').load(url);*/
+          $.ajax({
+               type : 'post',
+               async : true,
+               url:"/getpage",
+               dataType: 'json',
+               data: {"current":currentPage},
+               success:function(){},
+               error:function(){
+               },
+              complete:function () {
+                  // $(".section").html(data);
+                      //$('#section1').html("aaaaaaaaaaaaaaaa");
+                      //console.log(data(0).getBookname());
+                     $('#section1').load("http://localhost:8080/page");
+              }
+           })
+
+       }
+    }
+
+</script>
+</html>

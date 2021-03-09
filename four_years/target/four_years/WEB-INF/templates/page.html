@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="css/page.css"/>
+</head>
+<body>
+<div style="text-align: center;margin:250px auto;" th:fragment="myfooter">
+    <div id="pager" class="pager clearfix">
+
+    </div>
+</div>
+<form action="/page" id="subdata">
+    <input type="hidden" name="page_number" id="page_value" value="1"/>
+</form>
+</body>
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js" ></script>
+<script src="js/jquery.z-pager.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" >
+    $("#pager").zPager({
+        totalData: 50,
+        htmlBox: $('#wraper'),
+        btnShow: true,
+        ajaxSetData: false
+    });
+
+    function currentPage(currentPage) {
+        /*
+            触发页码数位置： Page/js/jquery.z-pager.js 64行
+        */
+
+        if(currentPage!=document.getElementById("page_value").value) {
+            document.getElementById("page_value").value = currentPage;
+            document.getElementById("subdata").submit();
+        }
+        console.log(currentPage);
+        console.log(document.getElementById("page_value").value);
+    }
+
+</script>
+</html>
